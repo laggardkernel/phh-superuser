@@ -31,9 +31,6 @@
 
 # NOTE: This part has to be adjusted to fit your own needs
 
-# Is this a cache mod?
-CACHEMOD=false
-
 # This will be the folder name under /magisk or /cache/magisk
 # This should also be the same as the id in your module.prop to prevent confusion
 MODID=phh
@@ -42,14 +39,11 @@ MODID=phh
 # Most mods would like it to be enabled
 AUTOMOUNT=false
 
-# Set to true if you need post-fs script (Only available in cache mods)
-POSTFS=false
+# Set to true if you need post-fs-data script
+POSTFSDATA=false
 
-# Set to true if you need post-fs-data script (Only available in non-cache mods)
-POSTFSDATA=true
-
-# Set to true if you need late_start service script (Only available in non-cache mods)
-LATESTARTSERVICE=false
+# Set to true if you need late_start service script
+LATESTARTSERVICE=true
 
 ##########################################################################################
 # Installation Message
@@ -79,7 +73,7 @@ REPLACE="
 /system/framework
 "
 
-# Construct your own list
+# Construct your own list here
 REPLACE="
 "
 
