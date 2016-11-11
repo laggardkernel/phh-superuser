@@ -1,4 +1,2 @@
-r266
-    - Allow priv-app to start root
-    - Allow audioserver to execute from memory (for Call Recorder)
-    - (Magisk) Change path to /sbin, same as official phh
+r266-2
+	- Preserve /sbin binaries to prevent issues
