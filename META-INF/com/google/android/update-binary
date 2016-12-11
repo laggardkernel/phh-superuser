@@ -110,6 +110,20 @@ target_size_check() {
   curFreeM=$((curSizeM - curUsedM));
 }
 
+getvar() {
+  local VARNAME=$1
+  local VALUE=$(eval echo \$"$VARNAME");
+  for FILE in /dev/.magisk /data/.magisk /cache/.magisk /system/.magisk; do
+    if [ -z "$VALUE" ]; then
+      LINE=$(cat $FILE 2>/dev/null | grep "$VARNAME=")
+      if [ ! -z "$LINE" ]; then
+        VALUE=${LINE#*=}
+      fi
+    fi
+  done
+  eval $VARNAME=\$VALUE
+}
+
 ##########################################################################################
 # Flashable update-binary preparation
 ##########################################################################################
@@ -168,6 +182,12 @@ source config.sh
 
 INSTALLER=$TMPDIR/$MODID
 MODPATH=$MOUNTPATH/$MODID
+
+getvar BINDSYSTEMXBIN
+if [ -z "$BINDSYSTEMXBIN" ]; then
+  # we don't bind su to /system/xbin by default
+  BINDSYSTEMXBIN=false
+fi
 
 mkdir -p $INSTALLER
 cd $INSTALLER
@@ -265,6 +285,11 @@ ui_print "- Copying files"
 mkdir -p $MODPATH/bin
 cp -af $BINDIR/. $MODPATH/bin
 mkdir -p $MODPATH/su.d
+
+if ($BINDSYSTEMXBIN); then
+  mkdir -p $MODPATH/xbin_bind
+  touch $MODPATH/xbin_bind/enable
+fi
 
 # Handle replace folders
 for TARGET in $REPLACE; do
