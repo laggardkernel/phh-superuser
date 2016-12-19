@@ -285,6 +285,17 @@ ui_print "- Copying files"
 mkdir -p $MODPATH/bin
 cp -af $BINDIR/. $MODPATH/bin
 mkdir -p $MODPATH/su.d
+touch $MODPATH/su.d/placeholder
+
+if [ ! -d "/system/etc/init.d" ]; then
+  if [ -d "$INSTALLER/system/etc/init.d" ]; then
+    mkdir -p $MODPATH/system
+    cp -af $INSTALLER/system/* $MODPATH/system
+  else
+    mkdir -p "$MODPATH/system/etc/"
+    ln -s "$MODPATH/su.d" "$MODPATH/system/etc/init.d"
+  fi
+fi
 
 if ($BINDSYSTEMXBIN); then
   mkdir -p $MODPATH/xbin_bind

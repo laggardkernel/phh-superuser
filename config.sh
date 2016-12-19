@@ -37,7 +37,7 @@ MODID=phh
 
 # Set to true if you need automount
 # Most mods would like it to be enabled
-AUTOMOUNT=false
+AUTOMOUNT=true
 
 # Set to true if you need post-fs-data script
 POSTFSDATA=true
