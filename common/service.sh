@@ -9,24 +9,19 @@ log_print() {
   log -p i -t phh "$1"
 }
 
-launch_daemonsu() {
-  # Revert to original path, legacy issue
-  case $PATH in
-    *busybox* )
-      export PATH=$OLDPATH
-      ;;
-  esac
-  # Switch contexts
-  echo "u:r:su_daemon:s0" > /proc/self/attr/current
-  # Start daemon
-  exec /sbin/su --daemon
-}
-
 # Disable the other root
 [ -d "/magisk/zzsupersu" ] && touch /magisk/zzsupersu/disable
 
 log_print "Live patching sepolicy"
 $MODDIR/bin/sepolicy-inject --live
+
+log_print "Moving and linking /sbin binaries"
+mount -o rw,remount rootfs /
+mv /sbin /sbin_orig
+mkdir /sbin
+chmod 755 /sbin
+ln -s /sbin_orig/* /sbin
+mount -o ro,remount rootfs /
 
 # Expose the root path
 log_print "Mounting supath"
@@ -47,4 +42,5 @@ for script in $MODDIR/su.d/* ; do
 done
 
 log_print "Starting su daemon"
-(launch_daemonsu &)
+[ ! -z $OLDPATH ] && export PATH=$OLDPATH
+/sbin/su --daemon

@@ -1,6 +1,8 @@
 # Magisk Compatible phh's SuperUser
 
-Bind su binary to /system/xbin on demand by `BINDSYSTEMXBIN` flag in `.magisk`. Disabled by default.
+### Additional Features
+- Bind su binary to /system/xbin on demand by `BINDSYSTEMXBIN` flag in `.magisk`. Disabled by default.
+- bind_mount /magisk/phh/su.d to /system/etc/init.d if the latter doesn't exist.
 
 **Official thread to phh's SuperUser: [phh's SuperUser/ OpenSource SELinux-capable SuperUser](http://forum.xda-developers.com/showthread.php?t=3216394)**
 

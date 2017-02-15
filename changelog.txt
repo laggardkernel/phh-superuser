@@ -1,2 +1,14 @@
-r266-2
-	- Preserve /sbin binaries to prevent issues
+Changelog
+ topjohnwu r2
+- Fix binary out-of-date issue
+ topjohnwu r1
+- Forked from phh main repo, improved daemon launching
+- Fixed Samsung no-suid issue
+ r266-2
+- Preserve /sbin binaries to prevent issues
+ r266
+- Allow priv-app to start root
+- Allow audioserver to execute from memory (for Call Recorder)
+- (Magisk) Change path to /sbin, now same as official phh
+ r259
+- Initial release on Magisk repo
