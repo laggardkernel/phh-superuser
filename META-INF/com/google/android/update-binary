@@ -7,7 +7,7 @@
 ui_print() {
   if ($BOOTMODE); then
     echo "$1"
-  else 
+  else
     echo -n -e "ui_print $1\n" >> /proc/self/fd/$OUTFD
     echo -n -e "ui_print\n" >> /proc/self/fd/$OUTFD
   fi
@@ -276,6 +276,13 @@ if (! is_mounted $MOUNTPATH); then
   exit 1
 fi
 
+# su.d scripts backup
+if [ -d "$MODPATH/su.d" ]; then
+  ui_print "- Backing up su.d scripts to /data/su.d"
+  # rm -rf /data/su.d 2>/dev/null
+  cp -af "$MODPATH/su.d" "/data/"
+fi
+
 # Create mod paths
 rm -rf $MODPATH
 mkdir -p $MODPATH
@@ -287,7 +294,19 @@ cp -af $BINDIR/. $MODPATH/bin
 mkdir -p $MODPATH/su.d
 touch $MODPATH/su.d/placeholder
 
+# su.d scripts restore
+if [ -d "/cache/su.d" ]; then
+  ui_print "- Restoring su.d scripts from /cache/su.d"
+  cp -af "/cache/su.d" "$MODPATH/"
+  # rm -rf /cache/su.d
+elif [ -d "/data/su.d" ]; then
+  ui_print "- Restoring su.d scripts from /data/su.d"
+  cp -af "/data/su.d" "$MODPATH/"
+  # rm -rf /data/su.d
+fi
+
 if [ ! -d "/system/etc/init.d" ]; then
+  ui_print "- Creating /system/etc/init.d folder systemlessly"
   if [ -d "$INSTALLER/system/etc/init.d" ]; then
     mkdir -p $MODPATH/system
     cp -af $INSTALLER/system/* $MODPATH/system
@@ -298,6 +317,7 @@ if [ ! -d "/system/etc/init.d" ]; then
 fi
 
 if ($BINDSYSTEMXBIN); then
+  ui_print "- Enabling the flag for mounting su to xbin"
   mkdir -p $MODPATH/xbin_bind
   touch $MODPATH/xbin_bind/enable
 fi
