@@ -15,7 +15,11 @@ MODDIR=${0%/*}
 
 # Use the included busybox for maximum compatibility and reliable results
 # e.g. we rely on the option "-c" for cp (reserve contexts), and -exec for find
-TOOLPATH=/data/busybox
+if [ -d /data/busybox ]; then
+  TOOLPATH=/data/busybox
+else
+  TOOLPATH=/dev/busybox
+fi
 # BINPATH=/data/magisk
 
 # export OLDPATH=$PATH

@@ -3,6 +3,12 @@
 LOGFILE=/cache/magisk.log
 MODDIR=${0%/*}
 
+if [ -d /data/busybox ]; then
+  TOOLPATH=/data/busybox
+else
+  TOOLPATH=/dev/busybox
+fi
+
 log_print() {
   echo $1
   echo "phh: $1" >> $LOGFILE
@@ -27,7 +33,7 @@ mount -o ro,remount rootfs /
 log_print "Mounting supath"
 rm -rf /magisk/.core/bin $MODDIR/sbin_bind
 mkdir -p $MODDIR/sbin_bind 
-/data/busybox/cp -afc /sbin/. $MODDIR/sbin_bind
+$TOOLPATH/cp -afc /sbin/. $MODDIR/sbin_bind
 chmod 755 $MODDIR/sbin_bind
 ln -s $MODDIR/bin/* $MODDIR/sbin_bind
 mount -o bind $MODDIR/sbin_bind /sbin
